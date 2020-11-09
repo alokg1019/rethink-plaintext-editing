@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@monaco-editor/react": "^3.6.3",
+    "@popperjs/core": "^2.5.4",
     "@zeit/next-css": "^1.0.1",
+    "bootstrap": "^4.5.3",
     "classnames": "^2.2.6",
+    "jquery": "^3.5.1",
     "lodash": "^4.17.19",
-    "next": "^9.5.1",
+    "monaco-editor": "^0.21.2",
+    "next": "^9.5.5",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-bootstrap": "^1.4.0",
+    "react-dom": "^16.13.1",
+    "react-markdown": "^5.0.2",
+    "remark-gfm": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

@@ -2,3 +2,16 @@
   width: 640px;
   background-color: var(--color-white);
 }
+
+.gridContainer {
+  display: flex;
+  padding-left: 8%;
+}
+
+.gridChild {
+  flex: 1;
+  margin: 10px;
+  grid-template-columns: 1fr 1fr;
+  flex-grow: 1;
+  margin-left: 10px;
+}
