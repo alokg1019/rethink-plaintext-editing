@@ -16,6 +16,7 @@ import IconJavaScriptSVG from '../public/icon-javascript.svg';
 import IconJSONSVG from '../public/icon-json.svg';
 
 import css from './style.module.css';
+import CodeEditor from '../components/CodeEditor/CodeEditor';
 
 const TYPE_TO_ICON = {
   'text/plain': IconPlaintextSVG,
@@ -24,7 +25,7 @@ const TYPE_TO_ICON = {
   'application/json': IconJSONSVG
 };
 
-function FilesTable({ files, activeFile, setActiveFile }) {
+function FilesTable({ files, activeFile, setActiveFile, setActiveIndex }) {
   return (
     <div className={css.files}>
       <table>
@@ -35,14 +36,18 @@ function FilesTable({ files, activeFile, setActiveFile }) {
           </tr>
         </thead>
         <tbody>
-          {files.map(file => (
+          {files.map((file, index) => (
             <tr
               key={file.name}
               className={classNames(
                 css.row,
                 activeFile && activeFile.name === file.name ? css.active : ''
               )}
-              onClick={() => setActiveFile(file)}
+              onClick={() => {
+                
+                setActiveFile(file);
+                setActiveIndex(index);
+              }}
             >
               <td className={css.file}>
                 <div
@@ -73,7 +78,8 @@ function FilesTable({ files, activeFile, setActiveFile }) {
 FilesTable.propTypes = {
   files: PropTypes.arrayOf(PropTypes.object),
   activeFile: PropTypes.object,
-  setActiveFile: PropTypes.func
+  setActiveFile: PropTypes.func,
+  setActiveIndex: PropTypes.func
 };
 
 function Previewer({ file }) {
@@ -99,23 +105,83 @@ Previewer.propTypes = {
 
 // Uncomment keys to register editors for media types
 const REGISTERED_EDITORS = {
-  // "text/plain": PlaintextEditor,
-  // "text/markdown": MarkdownEditor,
+  "text/plain": PlaintextEditor,
+  "text/markdown": MarkdownEditor,
+  "text/javascript" : CodeEditor,
+  "application/json" : CodeEditor
 };
 
 function PlaintextFilesChallenge() {
   const [files, setFiles] = useState([]);
   const [activeFile, setActiveFile] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
     const files = listFiles();
-    setFiles(files);
+    var cachedData = JSON.parse(localStorage.getItem("files"));
+
+    if(cachedData == null || cachedData.length == 0)
+    {
+      //localstorage empty, use the files data from array
+      setFiles(files);
+    }
+    else
+    {
+       // set files array from localstorage data.
+       var newFiles = files.map( localFile => {
+
+          //Check if this file present in cache
+          if(cachedData[localFile.name] !== undefined)
+          {
+              var cachedFile = cachedData[localFile.name];
+              var newFile = new File(
+                [cachedFile.content],
+                localFile.name,
+                {
+                   type : cachedFile.type,
+                   lastModified : cachedFile.lastModified
+                }
+              );
+
+              return newFile;
+          }
+          
+          return localFile;
+
+       });
+
+       setFiles(newFiles);
+    }
+
   }, []);
 
-  const write = file => {
-    console.log('Writing soon... ', file.name);
+  const write = (file, content) => {
 
-    // TODO: Write the file to the `files` array
+    console.log("Current index", activeIndex);
+    var cachedFiles = JSON.parse(localStorage.getItem('files'));
+    if(cachedFiles == null)
+    {
+        cachedFiles = {};
+    }
+
+    cachedFiles[file.name] = {
+       name : file.name,
+       content : content,
+       type : file.type,
+       lastModified : file.lastModified
+    };
+
+    var updatedFiles = files.map( oldFile => {
+      if(oldFile.name == file.name)
+      {
+          return file;
+      }
+      return oldFile;
+    });
+    
+    //Update the files array
+    setFiles(updatedFiles);
+    localStorage.setItem("files", JSON.stringify(cachedFiles));
   };
 
   const Editor = activeFile ? REGISTERED_EDITORS[activeFile.type] : null;
@@ -139,6 +205,7 @@ function PlaintextFilesChallenge() {
           files={files}
           activeFile={activeFile}
           setActiveFile={setActiveFile}
+          setActiveIndex={setActiveIndex}
         />
 
         <div style={{ flex: 1 }}></div>
