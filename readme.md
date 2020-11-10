@@ -17,6 +17,9 @@ Once complete, please email us a link to your forked repo with clean, tested cod
 
 # Solution
 
+![Markdown editor ](markdown_screenshot.png)
+
+![Javascript editor ](javascript_screenshot.png)
 
 - To run `npm install && npm run dev`
 
