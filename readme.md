@@ -12,3 +12,23 @@ To run the challenge:
 Once complete, please email us a link to your forked repo with clean, tested code. We will use Chrome to run it.
 
 - Rethink Engineering
+
+---
+
+# Solution
+
+
+- To run `npm install && npm run dev`
+
+# Assumptions and Limitations
+
+- Not included any backend for this solution. Keeping the state temporarily in `localStorage` to preserve state across page refreshes. Assuming a service to be present, which keeps syncing the state from `localStorage` to backend server independently.
+- Not included any buttons to save the changes. Saving the changes on each key-stroke in the editor. User should not be concerned with saving if the goal is to create a web based editor running on cloud.
+- Limitations: 5-10 MB storage limitation on browser localStorage.
+- Not showing separate previews for `javascript` and `json` files. Just showing the editor with proper syntax highlighting.
+- UI is not responsive for mobile
+
+## Libraries Used
+
+- [monaco-react](https://github.com/suren-atoyan/monaco-react) used for the editor.
+- [react-markdown](https://github.com/remarkjs/react-markdown) used for markdown preview.
