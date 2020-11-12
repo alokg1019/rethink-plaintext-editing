@@ -13,6 +13,18 @@
   padding-left: 8%;
 }
 
+@media(max-width: 1440px){
+  .gridContainer {
+    display: block;
+  }
+}
+
+@media(max-width: 800px){
+  .gridContainer {
+    display: block;
+  }
+}
+
 .gridChild {
   flex: 1;
   margin: 10px;
